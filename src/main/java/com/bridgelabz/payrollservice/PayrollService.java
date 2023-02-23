@@ -14,7 +14,7 @@ public class PayrollService {
 		try {
 			Connection connect = DriverManager.getConnection("jdbc:mysql://localhost:3306/payrollservice","root","root");
 			System.out.println("DataBase Connection Established....");
-			PreparedStatement statement = connect.prepareStatement("select * from employee_payroll where Name = 'Terissa';");
+			PreparedStatement statement = connect.prepareStatement("select * from employee_payroll WHERE Start_Date BETWEEN CAST('2021-04-05' AS DATE) AND DATE(NOW());");
 			ResultSet result = statement.executeQuery();
 			while(result.next()){
 				System.out.println("ID : "+result.getInt(1));

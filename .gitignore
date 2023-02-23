@@ -1,6 +1,6 @@
 * .setings/
-target/
-.classpah
-.project
+  target/
+  .classpah
+  .project
 pom.xml
 README.md
