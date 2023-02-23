@@ -14,8 +14,8 @@ public class PayrollService {
 		try {
 			Connection connect = DriverManager.getConnection("jdbc:mysql://localhost:3306/payrollservice","root","root");
 			System.out.println("DataBase Connection Established....");
-			PreparedStatement statement = connect.prepareStatement("UPDATE employee_payroll SET Salary = 3000000 WHERE Name = 'Terissa';");
-			ResultSet result = statement.executeQuery("select * from employee_payroll;");
+			PreparedStatement statement = connect.prepareStatement("select * from employee_payroll where Name = 'Terissa';");
+			ResultSet result = statement.executeQuery();
 			while(result.next()){
 				System.out.println("ID : "+result.getInt(1));
 				System.out.println("Name : "+result.getString(2));
