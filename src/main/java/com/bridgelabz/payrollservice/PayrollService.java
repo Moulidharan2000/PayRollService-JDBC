@@ -2,19 +2,19 @@ package com.bridgelabz.payrollservice;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 public class PayrollService {
-
-	public static void main(String[] args) {
+	
+	public boolean Query() {
 		
+		boolean check = true;
 		try {
 			Connection connect = DriverManager.getConnection("jdbc:mysql://localhost:3306/payrollservice","root","root");
 			System.out.println("DataBase Connection Established....");
-			Statement statement = connect.createStatement();
-			statement.execute("UPDATE employee_payroll SET Salary = 3000000 WHERE Name = 'Terissa';");
+			PreparedStatement statement = connect.prepareStatement("UPDATE employee_payroll SET Salary = 3000000 WHERE Name = 'Terissa';");
 			ResultSet result = statement.executeQuery("select * from employee_payroll;");
 			while(result.next()){
 				System.out.println("ID : "+result.getInt(1));
@@ -29,11 +29,20 @@ public class PayrollService {
 				System.out.println("Deductions : "+result.getInt(10));
 				System.out.println("Taxable_Pay : "+result.getInt(11));
 				System.out.println("Income_Tax : "+result.getInt(12));
-				System.out.println("Net_Pay : "+result.getInt(13));
+				System.out.println("Net_Pay : "+result.getInt(13)+"\n");
 			}
+			
 		}catch(SQLException e) {
 			System.out.println("DataBase is Not Connected....");
+			check = false;
 			e.printStackTrace();
 		}
+		return check;
+	}
+
+	public static void main(String[] args) {
+		
+		PayrollService payroll = new PayrollService();
+		payroll.Query();
 	}
 }
