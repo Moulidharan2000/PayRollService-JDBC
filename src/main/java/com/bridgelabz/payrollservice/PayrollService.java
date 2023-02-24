@@ -8,41 +8,95 @@ import java.sql.SQLException;
 
 public class PayrollService {
 	
-	public boolean Query() {
+	public void SumQuery(Connection connect) throws SQLException {
 		
-		boolean check = true;
+		PreparedStatement statement = connect.prepareStatement("select SUM(Salary) from employee_payroll WHERE Gender = ? GROUP BY Gender;");
+		statement.setString(1, "M");
+		ResultSet result1 = statement.executeQuery();
+		while(result1.next()){
+			System.out.println("Sum of Salary for Male Employees : "+result1.getInt(1));
+		}
+		statement.setString(1, "F");
+		ResultSet result2 = statement.executeQuery();
+		while(result2.next()){
+			System.out.println("Sum of Salary for Female Employees : "+result2.getInt(1));
+		}
+	}
+	
+	public void AvgQuerys(Connection connect) throws SQLException {
+		
+		PreparedStatement statement = connect.prepareStatement("select AVG(Salary) from employee_payroll WHERE Gender = ? GROUP BY Gender;");
+		statement.setString(1, "M");
+		ResultSet result1 = statement.executeQuery();
+		while(result1.next()){
+			System.out.println("Average of Salary for Male Employees : "+result1.getInt(1));
+		}
+		statement.setString(1, "F");
+		ResultSet result2 = statement.executeQuery();
+		while(result2.next()){
+			System.out.println("Average of Salary for Female Employees : "+result2.getInt(1));
+		}
+	}
+	
+	public void CountQuery(Connection connect) throws SQLException {
+
+		PreparedStatement statement = connect.prepareStatement("select COUNT(Salary) from employee_payroll WHERE Gender = ? GROUP BY Gender;");
+		statement.setString(1, "M");
+		ResultSet result1 = statement.executeQuery();
+		while(result1.next()){
+			System.out.println("Count of Male Employees : "+result1.getInt(1));
+		}
+		statement.setString(1, "F");
+		ResultSet result2 = statement.executeQuery();
+		while(result2.next()){
+			System.out.println("Count of Female Employees : "+result2.getInt(1));
+		}
+	}
+	
+	public void MinQuery(Connection connect) throws SQLException {
+
+		PreparedStatement statement = connect.prepareStatement("select MIN(Salary) from employee_payroll WHERE Gender = ? GROUP BY Gender;");
+		statement.setString(1, "M");
+		ResultSet result1 = statement.executeQuery();
+		while(result1.next()){
+			System.out.println("Minimum Salary of Male Employees : "+result1.getInt(1));
+		}
+		statement.setString(1, "F");
+		ResultSet result2 = statement.executeQuery();
+		while(result2.next()){
+			System.out.println("Minimum Salary of Female Employees : "+result2.getInt(1));
+		}
+	}
+	
+	public void MaxQuery(Connection connect) throws SQLException {
+
+		PreparedStatement statement = connect.prepareStatement("select MAX(Salary) from employee_payroll WHERE Gender = ? GROUP BY Gender;");
+		statement.setString(1, "M");
+		ResultSet result1 = statement.executeQuery();
+		while(result1.next()){
+			System.out.println("Maximum Salary of Male Employees : "+result1.getInt(1));
+		}
+		statement.setString(1, "F");
+		ResultSet result2 = statement.executeQuery();
+		while(result2.next()){
+			System.out.println("Maximum Salary of Female Employees : "+result2.getInt(1));
+		}
+	}
+
+	public static void main(String[] args) throws SQLException {
+		
 		try {
 			Connection connect = DriverManager.getConnection("jdbc:mysql://localhost:3306/payrollservice","root","root");
 			System.out.println("DataBase Connection Established....");
-			PreparedStatement statement = connect.prepareStatement("select * from employee_payroll WHERE Start_Date BETWEEN CAST('2021-04-05' AS DATE) AND DATE(NOW());");
-			ResultSet result = statement.executeQuery();
-			while(result.next()){
-				System.out.println("ID : "+result.getInt(1));
-				System.out.println("Name : "+result.getString(2));
-				System.out.println("Gender : "+result.getString(3));
-				System.out.println("Salary : "+result.getInt(4));
-				System.out.println("Start_Date : "+result.getDate(5));
-				System.out.println("Department : "+result.getString(6));
-				System.out.println("Address : "+result.getString(7));
-				System.out.println("Phone Number : "+result.getLong(8));
-				System.out.println("Basic_Pay : "+result.getInt(9));
-				System.out.println("Deductions : "+result.getInt(10));
-				System.out.println("Taxable_Pay : "+result.getInt(11));
-				System.out.println("Income_Tax : "+result.getInt(12));
-				System.out.println("Net_Pay : "+result.getInt(13)+"\n");
-			}
-			
+			PayrollService payroll = new PayrollService();
+			payroll.SumQuery(connect);
+			payroll.AvgQuerys(connect);
+			payroll.CountQuery(connect);
+			payroll.MinQuery(connect);
+			payroll.MaxQuery(connect);
 		}catch(SQLException e) {
-			System.out.println("DataBase is Not Connected....");
-			check = false;
+			System.out.println("Database Not Connected !!!.......");
 			e.printStackTrace();
 		}
-		return check;
-	}
-
-	public static void main(String[] args) {
-		
-		PayrollService payroll = new PayrollService();
-		payroll.Query();
 	}
 }
