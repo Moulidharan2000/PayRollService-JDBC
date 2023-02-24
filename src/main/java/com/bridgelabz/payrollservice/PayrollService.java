@@ -3,100 +3,43 @@ package com.bridgelabz.payrollservice;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class PayrollService {
 	
-	public void SumQuery(Connection connect) throws SQLException {
+	public boolean Query() {
 		
-		PreparedStatement statement = connect.prepareStatement("select SUM(Salary) from employee_payroll WHERE Gender = ? GROUP BY Gender;");
-		statement.setString(1, "M");
-		ResultSet result1 = statement.executeQuery();
-		while(result1.next()){
-			System.out.println("Sum of Salary for Male Employees : "+result1.getInt(1));
-		}
-		statement.setString(1, "F");
-		ResultSet result2 = statement.executeQuery();
-		while(result2.next()){
-			System.out.println("Sum of Salary for Female Employees : "+result2.getInt(1));
-		}
-	}
-	
-	public void AvgQuerys(Connection connect) throws SQLException {
-		
-		PreparedStatement statement = connect.prepareStatement("select AVG(Salary) from employee_payroll WHERE Gender = ? GROUP BY Gender;");
-		statement.setString(1, "M");
-		ResultSet result1 = statement.executeQuery();
-		while(result1.next()){
-			System.out.println("Average of Salary for Male Employees : "+result1.getInt(1));
-		}
-		statement.setString(1, "F");
-		ResultSet result2 = statement.executeQuery();
-		while(result2.next()){
-			System.out.println("Average of Salary for Female Employees : "+result2.getInt(1));
-		}
-	}
-	
-	public void CountQuery(Connection connect) throws SQLException {
-
-		PreparedStatement statement = connect.prepareStatement("select COUNT(Salary) from employee_payroll WHERE Gender = ? GROUP BY Gender;");
-		statement.setString(1, "M");
-		ResultSet result1 = statement.executeQuery();
-		while(result1.next()){
-			System.out.println("Count of Male Employees : "+result1.getInt(1));
-		}
-		statement.setString(1, "F");
-		ResultSet result2 = statement.executeQuery();
-		while(result2.next()){
-			System.out.println("Count of Female Employees : "+result2.getInt(1));
-		}
-	}
-	
-	public void MinQuery(Connection connect) throws SQLException {
-
-		PreparedStatement statement = connect.prepareStatement("select MIN(Salary) from employee_payroll WHERE Gender = ? GROUP BY Gender;");
-		statement.setString(1, "M");
-		ResultSet result1 = statement.executeQuery();
-		while(result1.next()){
-			System.out.println("Minimum Salary of Male Employees : "+result1.getInt(1));
-		}
-		statement.setString(1, "F");
-		ResultSet result2 = statement.executeQuery();
-		while(result2.next()){
-			System.out.println("Minimum Salary of Female Employees : "+result2.getInt(1));
-		}
-	}
-	
-	public void MaxQuery(Connection connect) throws SQLException {
-
-		PreparedStatement statement = connect.prepareStatement("select MAX(Salary) from employee_payroll WHERE Gender = ? GROUP BY Gender;");
-		statement.setString(1, "M");
-		ResultSet result1 = statement.executeQuery();
-		while(result1.next()){
-			System.out.println("Maximum Salary of Male Employees : "+result1.getInt(1));
-		}
-		statement.setString(1, "F");
-		ResultSet result2 = statement.executeQuery();
-		while(result2.next()){
-			System.out.println("Maximum Salary of Female Employees : "+result2.getInt(1));
-		}
-	}
-
-	public static void main(String[] args) throws SQLException {
-		
+		boolean check = true;
 		try {
 			Connection connect = DriverManager.getConnection("jdbc:mysql://localhost:3306/payrollservice","root","root");
 			System.out.println("DataBase Connection Established....");
-			PayrollService payroll = new PayrollService();
-			payroll.SumQuery(connect);
-			payroll.AvgQuerys(connect);
-			payroll.CountQuery(connect);
-			payroll.MinQuery(connect);
-			payroll.MaxQuery(connect);
+			PreparedStatement statement = connect.prepareStatement("insert into employee_payroll(Name, Gender, Salary, Start_Date, Department, Address, PhoneNumber, Basic_Pay, Deductions, Taxable_pay, Income_Tax, Net_Pay) values(?,?,?,?,?,?,?,?,?,?,?,?);");
+			statement.setString(1, "Mohan");
+			statement.setString(2, "M");
+			statement.setInt(3, 5000000);
+			statement.setString(4, "2022-02-08");
+			statement.setString(5, "HR");
+			statement.setString(6, "Chennai");
+			statement.setString(7, "9632145870");
+			statement.setInt(8, 50000);
+			statement.setInt(9, 5000);
+			statement.setInt(10, 2000);
+			statement.setInt(11, 3000);
+			statement.setInt(12, 40000);
+			int data = statement.executeUpdate();
+			System.out.println("Rows Inserted......");
 		}catch(SQLException e) {
+			check = false;
 			System.out.println("Database Not Connected !!!.......");
 			e.printStackTrace();
 		}
+		return check;
+	}
+	
+	public static void main(String[] args) throws SQLException {
+		
+			PayrollService payroll = new PayrollService();
+			payroll.Query();
+			
 	}
 }
